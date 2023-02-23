@@ -8,7 +8,6 @@ const routes = [
   {
     path: 'table',
     component: () => import('../pages/Table.vue'),
-    // children: [{ path: '', component: () => import('pages/Index.vue') }]
   },
 
   // Always leave this as last one,
