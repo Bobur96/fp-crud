@@ -1,37 +1,23 @@
+import Vue from "vue";
+import Vuex from "vuex";
 
-import { api } from 'boot/axios'
+Vue.use(Vuex);
 
-export const state = {
-  matches: [],
-  pagination: {
-    sortBy: 'desc',
-    descending: false,
-    page: 1,
-    rowsPerPage: 1,
-    rowsNumber: 0
-  }
-}
-
-export const mutations = {
-  SET_MATCHES(state, matches) {
-    state.matches = matches
-    state.pagination.rowsNumber = matches.count
-  }
-}
-
-export const actions = {
-  getMatches({ commit }) {
-    api
-      .get(`/api/v1/matches/?page=${state.pagination.page}`)
-      // returns object like this:
-      // {
-      //    count: 6,
-      //    next: "http://localhost:8000/api/v1/matches/?page=3",
-      //    previous: null,
-      //    results: [...]
-      // }
-      .then(response => {
-        commit('SET_MATCHES', response.data)
-      })
-  }
-}
+export const store = new Vuex.Store({
+  state: {
+    products: [],
+  },
+  getters: {},
+  mutations: {
+    getProduct() {
+      axios
+        .get("http://94.158.54.194:9092/api/product")
+        .then((res) => {
+          res.data.forEach((el) => {
+            el.created_date = new Date(el.created_date).toISOString().slice(0, 10);
+          });
+          state.products = res.data;
+        })
+    },
+  },
+});
