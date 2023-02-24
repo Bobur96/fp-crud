@@ -1,16 +1,16 @@
 <template>
-  <div style="padding-top: 20px">
+  <div style="padding-top: 50px">
     <h5 class="text-center" style="margin: 0">Add Product</h5>
     <q-form
       style="padding: 30px 6%"
       @submit="onSubmit"
       @reset="onReset"
-      class="row gap-2"
+      class="row"
     >
-      <div class="col-sm-6" style="padding: 0 5px;">
+      <div class="col-sm-6">
         <q-input
           filled
-          v-model="name"
+          v-model="item.name_uz"
           label="Name *"
           lazy-rules
           :rules="[
@@ -19,11 +19,11 @@
         />
       </div>
 
-      <div class="col-sm-6" style="padding: 0 5px;">
+      <div class="col-sm-6">
         <q-input
           filled
           type="number"
-          v-model="cost"
+          v-model="item.cost"
           label="Cost *"
           lazy-rules
           :rules="[
@@ -33,10 +33,10 @@
         />
       </div>
 
-      <div class="col-sm-6" style="padding: 0 5px;">
+      <div class="col-sm-6">
         <q-input
           filled
-          v-model="address"
+          v-model="item.address"
           label="Address *"
           lazy-rules
           :rules="[
@@ -46,10 +46,25 @@
         />
       </div>
 
-      <div class="col-sm-6" style="padding: 0 5px;">
+      <div class="col-sm-6">
+        <q-select
+          filled
+          option-label="name_uz"
+          option-value="id"
+          v-model="item.product_type_id"
+          :options="options"
+          label="Product type *"
+          emit-value
+          map-options
+          
+          :rules="[(val) => (val !== null && val !== '') || 'Product type field is required']"
+        />
+      </div>
+
+      <div class="col-sm-6">
         <q-input
           filled
-          v-model="creation_date"
+          v-model="item.created_date"
           label="Create date *"
           lazy-rules
           :rules="[
@@ -59,7 +74,7 @@
           <template v-slot:prepend>
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date v-model="creation_date" mask="YYYY-MM-DD HH:mm">
+                <q-date v-model="item.created_date" mask="YYYY-MM-DD HH:mm">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -72,7 +87,7 @@
             <q-icon name="access_time" class="cursor-pointer">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
                 <q-time
-                  v-model="creation_date"
+                  v-model="item.created_date"
                   mask="YYYY-MM-DD HH:mm"
                   format24h
                 >
@@ -86,7 +101,7 @@
         </q-input>
       </div>
 
-      <div>
+      <div class="col-12" style="padding: 15px 10px">
         <q-btn label="Submit" type="submit" color="primary" />
         <q-btn
           label="Reset"
@@ -101,27 +116,57 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      name: null,
-      cost: null,
-      address: null,
-      creation_date: null,
-    };
+      item: {
+        name_uz: null,
+        cost: null,
+        address: null,
+        product_type_id: null,
+        created_date: null,
+      },
+      options: [],
+    }
   },
   methods: {
+    getOptions(){
+      axios.get("http://94.158.54.194:9092/api/product/get-product-types")
+        .then(response => {
+          this.options = response.data;
+        })
+    },
+
     onSubmit() {
-      console.log(this.name);
+      this.item.created_date = Date.parse(this.item.created_date.slice(0,10))
+      console.log(this.item);
+      axios.post("http://94.158.54.194:9092/api/product", this.item)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
 
     onReset() {
-      this.name = null;
-      this.cost = null;
-      this.accept = false;
+      this.item.name_uz = null,
+      this.item.cost = null,
+      this.item.address = null,
+      this.item.product_type_id = null,
+      this.item.created_date = null
     },
   },
+  mounted() {
+    this.getOptions()
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+.col-sm-6{
+  padding: 0 10px;
+  margin: 4px 0;
+}
+</style>

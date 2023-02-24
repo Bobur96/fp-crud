@@ -3,18 +3,11 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/AddProduct.vue') }]
+    children: [
+      // { path: '', component: () => import('pages/Table.vue') },
+      { path: '', component: () => import('pages/AddProduct.vue') },
+    ]
   },
-  // {
-  //   path: '/',
-  //   component: () => import('layouts/MainLayout.vue'),
-  //   children: [{ path: '', component: () => import('pages/ViewPage.vue') }]
-  // },
-  // {
-  //   path: '/',
-  //   component: () => import('layouts/MainLayout.vue'),
-  //   children: [{ path: '', component: () => import('pages/Table.vue') }]
-  // },
   {
     path: 'products',
     component: () => import('pages/Table.vue'),

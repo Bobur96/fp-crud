@@ -22,25 +22,29 @@ export default {
       ],
     };
   },
-  mounted() {
-    axios
-      .get("http://94.158.54.194:9092/api/product")
-      .then((res) => {
-        res.data.forEach(el => {
-          el.created_date = new Date(el.created_date).toISOString().slice(0, 10)
-          el.actions = 'icon'
+  methods: {
+    getProducts() {
+      axios
+        .get("http://94.158.54.194:9092/api/product")
+        .then((res) => {
+          res.data.forEach((el) => {
+            el.created_date = new Date(el.created_date).toISOString().slice(0, 10);
+            el.actions = "icon";
+          });
+
+          this.products = res.data;
         })
-
-        this.products = res.data
-      })
-      .finally(() =>
-        setTimeout(() => {
-          this.loading = false;
-        }, 1000)
-      );
+        .finally(() =>
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000)
+        );
+    },
   },
-}
-
+  mounted() {
+    this.getProducts()
+  },
+};
 </script>
 
 <style></style>
