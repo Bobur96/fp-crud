@@ -1,3 +1,3 @@
-export function SET_MATCHES(state, matches) {
-    state.matches = matches
-  }
+export function SET_PRODUCTS(state, products) {
+  state.products = products;
+}
