@@ -12,17 +12,13 @@ export default {
   data() {
     return {
       loading: true,
-      // pagination: {
-      //   sortBy: "name",
-      //   descending: false,
-      //   page: 1,
-      // },
       products: [],
       columns: [
         { name: "name_uz", label: "Name", align: "left", field: "name_uz", sortable: true, },
         { name: "address", label: "Address", align: "left", field: "address", sortable: true, },
         { name: "cost", label: "Cost", align: "left", field: "cost", sortable: true, },
         { name: "created_date", label: "Date", align: "left", field: "created_date", sortable: true, },
+        { name: "actions", label: "Actions", align: "left", field: "actions", sortable: true, },
       ],
     };
   },
@@ -32,6 +28,7 @@ export default {
       .then((res) => {
         res.data.forEach(el => {
           el.created_date = new Date(el.created_date).toISOString().slice(0, 10)
+          el.actions = 'icon'
         })
 
         this.products = res.data

@@ -3,11 +3,16 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Table.vue') }]
+    children: [{ path: '', component: () => import('pages/ViewPage.vue') }]
   },
+  // {
+  //   path: '/',
+  //   component: () => import('layouts/MainLayout.vue'),
+  //   children: [{ path: '', component: () => import('pages/Table.vue') }]
+  // },
   {
-    path: 'table',
-    component: () => import('../pages/Table.vue'),
+    path: 'products',
+    component: () => import('pages/Table.vue'),
   },
 
   // Always leave this as last one,
