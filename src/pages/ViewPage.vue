@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h5 class="text-center" style="margin: 14px">View</h5>
-    <div class="q-pa-md row items-start q-gutter-md" style="padding: 20px 8%">
-      <q-card class="my-card col-md-3">
+  <div style="padding: 20px 5vw">
+    <h5 class="text-center" style="margin: 0px">View</h5>
+    <div class="q-pa-md row items-start q-gutter-md">
+      <q-card class="my-card">
         <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />
 
         <q-card-section>
@@ -35,10 +35,10 @@
         </q-card-actions>
       </q-card>
 
-      <q-card style="margin-left: 30px; padding: 10px 20px" class="col-md-8">
+      <q-card style="padding: 10px 20px" class="col-md-8">
         <div>
-          <div class="card mb-3 p-1">
-            <div class="card-body p-3">
+          <div class="">
+            <div class="">
               <div class="row items-center" style="margin: 17px 0">
                 <div class="col-sm-3">
                   <p class="text-subtitle2 items-center q-ma-none">Product Name</p>
@@ -108,10 +108,10 @@ export default {
   data() {
     return {
       stars: 4,
-      name: "Laptop",
-      cost: "TATU",
-      address: "TT va KT",
-      create_date: "Bachelor",
+      name: "Laptop i7 11570U",
+      cost: "$500",
+      address: "Alisher Navoiy street",
+      create_date: "12-02-2022",
 
       loading4: false,
     };
