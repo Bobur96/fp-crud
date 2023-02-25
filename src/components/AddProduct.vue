@@ -212,10 +212,15 @@ export default {
       });
     },
   },
-  mounted(){
-    this.getOptions()
-  }
+  mounted() {
+    this.getOptions();
+  },
 };
 </script>
 
-<style></style>
+<style scoped>
+.col-sm-6 {
+  padding: 0 10px;
+  margin: 4px 0;
+}
+</style>

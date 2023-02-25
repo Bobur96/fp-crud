@@ -9,10 +9,10 @@
     >
       <template v-slot:body-cell-actions="props">
         <td style="width: 210px" :props="props">
-          <q-icon class="text-primary" name="print" size="xs">
+          <q-icon class="text-primary" to="view" name="print" size="xs">
             <q-tooltip>view</q-tooltip>
           </q-icon>
-          <q-icon class="text-warning" name="edit" size="xs">
+          <q-icon class="text-warning" name="edit" size="xs" @click="editProduct(props.row)">
             <q-tooltip>edit</q-tooltip>
           </q-icon>
           <q-icon
@@ -31,6 +31,7 @@
 
 <script>
 import axios from "axios";
+import { RouterView } from "vue-router";
 import AddProductVue from "src/components/AddProduct.vue";
 
 export default {
@@ -110,6 +111,12 @@ export default {
         });
     },
 
+    editProduct(item) {
+      this.title = 'EditProduct'
+      this.product = item
+      this.modal = true
+    },
+
     showNotif() {
       this.$q.notify({
         message: "Successfully deleted!",
@@ -121,20 +128,12 @@ export default {
   mounted() {
     this.getProducts();
   },
-  updated(){
-    this.getProducts();
-  }
 };
 </script>
 
-<style>
-.col-sm-6{
-  padding: 0 10px;
-  margin: 4px 0;
-}
-
+<style scoped>
 i {
-  margin-right: 25px;
+  margin-right: 25px !important;
   cursor: pointer !important;
 }
 </style>
