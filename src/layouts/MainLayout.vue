@@ -35,14 +35,9 @@ import EssentialLink from "components/EssentialLink.vue";
 
 const linksData = [
   {
-    title: "Home",
-    icon: "home",
-    link: "/",
-  },
-  {
     title: "Products",
     icon: "code",
-    link: "/products",
+    link: "/",
   },
 ];
 

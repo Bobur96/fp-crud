@@ -1,18 +1,25 @@
 <template>
   <div class="q-pa-md">
     <h5 class="text-center" style="margin: 14px">Products</h5>
-    <q-table
-      :data="products"
-      :columns="columns"
-      :loading="loading"
-      row-key="id"
-    >
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px">
+      <q-btn
+        label=" Add Product"
+        color="primary"
+        @click="
+          mode = 'create';
+          addShow = true;
+        "
+      />
+    </div>
+    <q-table :data="products" :columns="columns" :loading="loading" row-key="id">
       <template v-slot:body-cell-actions="props">
         <td style="width: 210px" :props="props">
-          <q-icon class="text-primary" to="view" name="print" size="xs">
-            <q-tooltip>view</q-tooltip>
-          </q-icon>
-          <q-icon class="text-warning" name="edit" size="xs" @click="editProduct(props.row)">
+          <q-icon
+            class="text-primary"
+            name="edit"
+            size="xs"
+            @click="editProduct(props.row)"
+          >
             <q-tooltip>edit</q-tooltip>
           </q-icon>
           <q-icon
@@ -25,24 +32,35 @@
         </td>
       </template>
     </q-table>
-    <AddProductVue />
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="addShow">
+        <AddProductVue @added=" () => { getProducts(); addShow = false;}"
+          :mode="mode"
+          :updateItem="currentItem"
+        />
+      </q-dialog>
+    </div>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { RouterView } from "vue-router";
 import AddProductVue from "src/components/AddProduct.vue";
-
+import { mapState, mapActions } from "vuex";
 export default {
-  components:{
+  components: {
     AddProductVue,
   },
   data() {
     return {
       loading: true,
-      medium: false,
-      products: [],
+      addShow: false,
+      mode: "create",
+      currentItem: {},
       columns: [
         {
           name: "name_uz",
@@ -82,39 +100,30 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState("products", { products: "list" }),
+  },
   methods: {
-    getProducts() {
-      axios
-        .get("http://94.158.54.194:9092/api/product")
-        .then((res) => {
-          res.data.forEach((el) => {
-            el.created_date = new Date(el.created_date)
-              .toISOString()
-              .slice(0, 10);
-          });
-
-          this.products = res.data;
-        })
-        .finally(() =>
-          setTimeout(() => {
-            this.loading = false;
-          }, 1000)
-        );
+    ...mapActions("products", ["getProducts"]),
+    async getProductsAll() {
+      try {
+        this.loading = true;
+        this.getProducts();
+      } finally {
+        this.loading = false;
+      }
     },
-
     deleteProduct(id) {
-      axios
-        .delete(`http://94.158.54.194:9092/api/product/${id}`)
-        .then((res) => {
-          this.showNotif();
-          this.getProducts();
-        });
+      axios.delete(`http://94.158.54.194:9092/api/product/${id}`).then((res) => {
+        this.showNotif();
+        this.getProductsAll();
+      });
     },
 
     editProduct(item) {
-      this.title = 'EditProduct'
-      this.product = item
-      this.modal = true
+      this.currentItem = item;
+      this.mode = "update";
+      this.addShow = true;
     },
 
     showNotif() {
@@ -123,10 +132,9 @@ export default {
         color: "purple",
       });
     },
-
   },
   mounted() {
-    this.getProducts();
+    this.getProductsAll();
   },
 };
 </script>
